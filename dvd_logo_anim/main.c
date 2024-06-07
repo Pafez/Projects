@@ -2,13 +2,12 @@
 
 #define SDL_MAIN_HANDLED
 #include <SDL2/SDL.h>
-
 #include <SDL2/SDL_image.h>
 
 #define WINDOW_WIDTH 640
 #define WINDOW_HEIGHT 480
-#define LOGO_WIDTH 100
-#define LOGO_HEIGHT 70
+#define LOGO_WIDTH 744/4
+#define LOGO_HEIGHT 347/4
 #define LOGO_START_POS_X 50
 #define LOGO_START_POS_Y 300
 
@@ -22,6 +21,11 @@ int main() {
 
     SDL_Rect rect = {LOGO_START_POS_X, LOGO_START_POS_Y, LOGO_WIDTH, LOGO_HEIGHT};
     int x_velocity = 1, y_velocity = 1;
+
+    SDL_Texture * texture = IMG_LoadTexture(renderer, "media\\dvd_logo.png");
+    if (!texture) {
+        printf("%d", SDL_GetError());
+    }
     
     while (run) {
         SDL_Event event;
@@ -45,8 +49,7 @@ int main() {
         if (rect.y + rect.h >= WINDOW_HEIGHT) y_velocity = -1;
         else if (rect.y <= 0) y_velocity = 1;
 
-        SDL_SetRenderDrawColor(renderer, 255, 0, 255, 255);
-        SDL_RenderFillRect(renderer, &rect);
+        SDL_RenderCopy(renderer, texture, NULL, &rect);
 
         SDL_RenderPresent(renderer);
         SDL_Delay(16);
