@@ -84,11 +84,16 @@ int main() {
         //printf("%d %d\n", snake_cell.x, snake_cell.y);
 
         if (snake_vel_x != 0 || snake_vel_y != 0)
-            Snake_head_pos_history = List_AppInit(snake_cell.x*WIN_LEN + snake_cell.y, Snake_head_pos_history);
+            List_Append(Snake_head_pos_history, snake_cell.x*WIN_LEN + snake_cell.y);
+            printf("%d\n", List_GetValue(Snake_head_pos_history, snake_length));
 
         if (SDLRect_IsCollision(snake_cell, food)) {
             score++;
             snake_length++;
+
+            SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+            SDL_RenderFillRect(renderer, &food);
+
             food.x = rand() % WINDOW_WIDTH;
             food.y = rand() % WINDOW_HEIGHT;
 
@@ -101,27 +106,15 @@ int main() {
         if (snake_cell.y > WINDOW_HEIGHT) {snake_cell.y = -snake_cell.h;}
 
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
-        int temp_x = snake_cell.x, temp_y = snake_cell.y;
-        int snake_cell_iter, cell_pos;
-        
-        for (snake_cell_iter=0; snake_cell_iter < snake_length; snake_cell_iter++) {
-            
-            cell_pos = List_GetValue(Snake_head_pos_history, snake_cell_iter);
-            snake_cell.x = cell_pos/WIN_LEN;
-            snake_cell.y = cell_pos%WIN_LEN;
-            SDL_RenderFillRect(renderer, &snake_cell);
-
-        }
-        snake_cell.x = temp_x;
-        snake_cell.y = temp_y;
+        SDL_RenderFillRect(renderer, &snake_cell);
 
         SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
         SDL_RenderFillRect(renderer, &food);
 
         SDL_RenderPresent(renderer);
         SDL_Delay(5);
-        SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
-        SDL_RenderClear(renderer);
+        //SDL_SetRenderDrawColor(renderer, 0, 0, 0, 100);
+        //SDL_RenderClear(renderer);
     }
 
     List_Delete(Snake_head_pos_history);
