@@ -3,6 +3,7 @@
 #include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <time.h>
 
 #include "linkedlist.h"
 
@@ -23,6 +24,7 @@ int SDLRect_IsCollision(SDL_Rect obj1, SDL_Rect obj2);
 int Coord_IsCollision(int obj1_top_x, int obj1_top_y, int obj1_bottom_x, int obj1_bottom_y, int obj2_top_x, int obj2_top_y, int obj2_bottom_x, int obj2_bottom_y);
 
 int main() {
+    srand(time(0));
     int run = 1;
 
     SDL_Init(SDL_INIT_VIDEO);
@@ -46,21 +48,25 @@ int main() {
                 case SDL_KEYDOWN: {
                     switch (event.key.keysym.sym) {
                         case SDLK_w:
-                            snake_vel_x = 0;
-                            snake_vel_y = -SNAKE_VELOCITY;
-                            break;
+                            if (snake_vel_y == 0) {
+                                snake_vel_x = 0;
+                                snake_vel_y = -SNAKE_VELOCITY;
+                            } break;
                         case SDLK_s:
+                            if (snake_vel_y == 0) {
                             snake_vel_x = 0;
                             snake_vel_y = SNAKE_VELOCITY;
-                            break;
+                            } break;
                         case SDLK_a:
+                            if (snake_vel_x == 0) {
                             snake_vel_y = 0;
                             snake_vel_x = -SNAKE_VELOCITY;
-                            break;
+                            } break;
                         case SDLK_d:
+                            if (snake_vel_x == 0) {
                             snake_vel_y = 0;
                             snake_vel_x = SNAKE_VELOCITY;
-                            break;
+                            } break;
                         case SDLK_SPACE:
                             snake_vel_x = snake_vel_y = 0;
                             break;
@@ -102,14 +108,29 @@ int main() {
 
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         int temp_x = snake_cell.x, temp_y = snake_cell.y;
-        int snake_cell_iter, cell_pos;
-        
-        for (snake_cell_iter=0; snake_cell_iter < snake_length; snake_cell_iter++) {
+        int snake_cell_iter1, cell_pos;
+        for (snake_cell_iter1=0; snake_cell_iter1 < (snake_length-1)*CELL_WIDTH+1; snake_cell_iter1++) {
             
-            cell_pos = List_GetValue(Snake_head_pos_history, snake_cell_iter);
+            cell_pos = List_GetValue(Snake_head_pos_history, snake_cell_iter1);
             snake_cell.x = cell_pos/WIN_LEN;
             snake_cell.y = cell_pos%WIN_LEN;
             SDL_RenderFillRect(renderer, &snake_cell);
+
+        }
+        snake_cell.x = temp_x;
+        snake_cell.y = temp_y;
+
+        int snake_cell_iter2;
+        for (snake_cell_iter2=CELL_WIDTH*2+1; snake_cell_iter2 < snake_length*CELL_WIDTH; snake_cell_iter2++) {
+            
+            cell_pos = List_GetValue(Snake_head_pos_history, snake_cell_iter2);
+            snake_cell.x = cell_pos/WIN_LEN;
+            snake_cell.y = cell_pos%WIN_LEN;
+            if (Coord_IsCollision(temp_x, temp_y, temp_x+CELL_WIDTH, temp_y+CELL_HEIGHT, snake_cell.x, snake_cell.y, snake_cell.x+snake_cell.w, snake_cell.y+snake_cell.h)) {
+                printf("Game Over!\nSCORE: %d\n", score);
+                run = 0;
+                break;
+            }
 
         }
         snake_cell.x = temp_x;

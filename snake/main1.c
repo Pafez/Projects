@@ -84,8 +84,7 @@ int main() {
         //printf("%d %d\n", snake_cell.x, snake_cell.y);
 
         if (snake_vel_x != 0 || snake_vel_y != 0)
-            List_Append(Snake_head_pos_history, snake_cell.x*WIN_LEN + snake_cell.y);
-            printf("%d\n", List_GetValue(Snake_head_pos_history, snake_length));
+            Snake_head_pos_history = List_AppInit(snake_cell.x*WIN_LEN + snake_cell.y, Snake_head_pos_history);
 
         if (SDLRect_IsCollision(snake_cell, food)) {
             score++;
@@ -104,6 +103,8 @@ int main() {
         else if (snake_cell.x > WINDOW_WIDTH) {snake_cell.x = -snake_cell.w;}
         if (snake_cell.y+snake_cell.h < 0) {snake_cell.y = WINDOW_HEIGHT;}
         if (snake_cell.y > WINDOW_HEIGHT) {snake_cell.y = -snake_cell.h;}
+
+        
 
         SDL_SetRenderDrawColor(renderer, 0, 255, 0, 255);
         SDL_RenderFillRect(renderer, &snake_cell);
