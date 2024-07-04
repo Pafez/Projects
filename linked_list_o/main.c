@@ -115,7 +115,7 @@ int List_PopBack(struct Node * head) {
     return value;
 }
 
-int List_DoesContain(struct Node * head, int value) {
+int List_Contains(struct Node * head, int value) {
     int contains = 0;
     struct Node * iterator = head;
     while (iterator->next != NULL) {
