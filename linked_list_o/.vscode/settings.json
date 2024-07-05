@@ -1,0 +1,7 @@
+{
+    "files.associations": {
+        ".fantomasignore": "ignore",
+        "*.h": "c",
+        "type_traits": "c"
+    }
+}
