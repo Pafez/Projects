@@ -73,16 +73,6 @@ int LL_Append(struct LinkedList * list, int value) {
     return errOK;
 }
 
-static int List_Length(struct Node * head) {
-    int i = 1;
-    struct Node *iterator = head;
-    while (iterator->next != NULL) {
-        iterator = iterator->next;
-        i++;
-    }
-    return i;
-}
-
 int LL_Length(struct LinkedList * list) {
     return list->length;
 }
@@ -283,7 +273,6 @@ int main() {
 
     int k;
     printf("%d", LL_ValueAt(test, 1, &k));
-    printf("%d", k);
 
     LL_Delete(test);
     return 0;
