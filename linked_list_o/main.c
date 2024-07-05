@@ -20,7 +20,7 @@ struct LinkedList {
     int length;
 };
 
-struct Node *List_Init(int headvalue) {
+static struct Node *List_Init(int headvalue) {
     struct Node *self = malloc(sizeof(struct Node));
     self->value = headvalue;
     self->next = NULL;
@@ -42,7 +42,7 @@ static int LL_ConditionalFirstElement(struct LinkedList * list, int value) {
     return 1;
 }
 
-void List_Delete(struct Node *head) {
+static void List_Delete(struct Node *head) {
     if (head->next != NULL) {
         List_Delete(head->next);
     }
@@ -54,7 +54,7 @@ void LL_Delete(struct LinkedList * list) {
     free(list);
 }
 
-enum ErrorCode List_Append(struct Node *head, int value) {
+static enum ErrorCode List_Append(struct Node *head, int value) {
     struct Node *iterator = head;
 
     while (iterator->next != NULL) {
@@ -73,7 +73,7 @@ int LL_Append(struct LinkedList * list, int value) {
     return errOK;
 }
 
-int List_Length(struct Node * head) {
+static int List_Length(struct Node * head) {
     int i = 1;
     struct Node *iterator = head;
     while (iterator->next != NULL) {
@@ -87,7 +87,7 @@ int LL_Length(struct LinkedList * list) {
     return list->length;
 }
 
-enum ErrorCode List_ValueAt(struct Node *head, int index, int * value) {
+static enum ErrorCode List_ValueAt(struct Node *head, int index, int * value) {
     int i = 0;
     struct Node *iterator = head;
     while (i < index) {
@@ -104,7 +104,7 @@ enum ErrorCode LL_ValueAt(struct LinkedList * list, int index, int * value) {
     return List_ValueAt(list->pointer, index, value);
 }
 
-enum ErrorCode List_PushAt(struct Node * head, int index, int value) {
+static enum ErrorCode List_PushAt(struct Node * head, int index, int value) {
     int i = 0;
     struct Node *iterator = head;
     while (i < index) {
@@ -130,7 +130,7 @@ enum ErrorCode LL_PushAt(struct LinkedList * list, int index, int value) {
     return is_error;
 }
 
-enum ErrorCode List_PushFront(struct Node * head, int value) {
+static enum ErrorCode List_PushFront(struct Node * head, int value) {
     return List_PushAt(head, 0, value);
 }
 
@@ -143,7 +143,7 @@ enum ErrorCode LL_PushFront(struct LinkedList * list, int value) {
     return is_error;
 }
 
-enum ErrorCode List_PushBack(struct Node * head, int value) {
+static enum ErrorCode List_PushBack(struct Node * head, int value) {
     struct Node *iterator = head;
     while (iterator->next != NULL) {
         iterator = iterator->next;
@@ -161,7 +161,7 @@ enum ErrorCode LL_PushBack(struct LinkedList * list, int value) {
     return is_error;
 }
 
-enum ErrorCode List_PopAt(struct Node * head, int index, int * value) {
+static enum ErrorCode List_PopAt(struct Node * head, int index, int * value) {
     struct Node * iterator = head;
     int Value = head->value;
     if (index == 0) {
@@ -191,7 +191,7 @@ enum ErrorCode LL_PopAt(struct LinkedList * list, int index, int * value) {
     return List_PopAt(list->pointer, index, value);
 }
 
-enum ErrorCode List_PopFront(struct Node * head, int * value) {
+static enum ErrorCode List_PopFront(struct Node * head, int * value) {
     return List_PopAt(head, 0, value);
 }
 
@@ -201,7 +201,7 @@ enum ErrorCode LL_PopFront(struct LinkedList * list, int * value) {
     return List_PopFront(list->pointer, value);
 }
 
-enum ErrorCode List_PopBack(struct Node * head, int * value) {
+static enum ErrorCode List_PopBack(struct Node * head, int * value) {
     struct Node * iterator = head;
     int i = 0;
     while (iterator->next->next != NULL) {
@@ -222,7 +222,7 @@ enum ErrorCode LL_PopBack(struct LinkedList * list, int * value) {
     return List_PopBack(list->pointer, value);
 }
 
-int List_Contains(struct Node * head, int value) {
+static int List_Contains(struct Node * head, int value) {
     int contains = 0;
     struct Node * iterator = head;
     while (iterator->next != NULL) {
@@ -241,7 +241,7 @@ int LL_Contains(struct LinkedList * list, int value) {
     return List_Contains(list->pointer, value);
 }
 
-enum ErrorCode List_IndexOf(struct Node * head, int value) {
+static enum ErrorCode List_IndexOf(struct Node * head, int value) {
     int i = 0;
     struct Node * iterator = head;
     while (iterator->value != value) {
@@ -258,7 +258,7 @@ enum ErrorCode LL_IndexOf(struct LinkedList * list, int value) {
     return List_IndexOf(list->pointer, value);
 }
 
-enum ErrorCode List_Remove(struct Node * head, int value) {
+static enum ErrorCode List_Remove(struct Node * head, int value) {
     int i = List_IndexOf(head, value);
     if (i == errValueNotFound) {
         return i;
