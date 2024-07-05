@@ -1,6 +1,8 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+
+
 struct Node {
     int value;
     struct Node *next;
@@ -86,7 +88,7 @@ int List_PopAt(struct Node * head, int index) {
     if (index == 0) {
         head->value = head->next->value;
         head->next = head->next->next;
-        free(iterator);
+        free(iterator->next);
         return value;
     }
     int i = 0;
@@ -94,8 +96,10 @@ int List_PopAt(struct Node * head, int index) {
         iterator = iterator->next;
         i++;
     }
+    struct Node * temp = iterator->next;
     value = iterator->next->value;
     iterator->next = iterator->next->next;
+    free(temp);
     return value;
 }
 
@@ -110,8 +114,10 @@ int List_PopBack(struct Node * head) {
         iterator = iterator->next;
         i++;
     }
+    struct Node * temp = iterator->next;
     int value = iterator->next->value;
     iterator->next = NULL;
+    free(temp);
     return value;
 }
 
@@ -127,6 +133,28 @@ int List_Contains(struct Node * head, int value) {
     return contains;
 }
 
+int List_IndexOf(struct Node * head, int value) {
+    int i = 0;
+    struct Node * iterator = head;
+    while (iterator->value != value) {
+        iterator = iterator->next;
+        i++;
+    }
+    if (iterator->value == value) {
+        return i;
+    }
+    return -1;
+}
+
+int List_Remove(struct Node * head, int value) {
+    int i = List_IndexOf(head, value);
+    if (i != -1) {
+        List_PopAt(head, i);
+        return 0;
+    }
+    return -1;
+}
+
 int main() {
     struct Node * test = List_Init(1);
 
@@ -138,6 +166,7 @@ int main() {
     List_PushBack(test, 1000);
 
     List_PopAt(test, 0);
+    List_Remove(test, 3);
 
     int i;
     for (i=0;i<List_Length(test);i++) {
