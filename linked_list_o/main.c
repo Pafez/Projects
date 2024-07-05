@@ -89,6 +89,7 @@ static enum ErrorCode List_ValueAt(struct Node *head, int index, int * value) {
 }
 
 enum ErrorCode LL_ValueAt(struct LinkedList * list, int index, int * value) {
+    if (list->length == 0) return errEmptyList;
     if (index < 0) return errInvalidIndex;
     if (list->length <= index) return errIndexOutOfRange;
     return List_ValueAt(list->pointer, index, value);
@@ -268,11 +269,10 @@ enum ErrorCode LL_Remove(struct LinkedList * list, int value) {
 
 int main() {
     struct LinkedList * test = LL_Init();
-    LL_Append(test, 2);
 
 
     int k;
-    printf("%d", LL_ValueAt(test, 1, &k));
+    printf("%d", LL_ValueAt(test, -1, &k));
 
     LL_Delete(test);
     return 0;
