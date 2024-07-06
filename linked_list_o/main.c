@@ -20,7 +20,65 @@ struct LinkedList {
     int length;
 };
 
-static struct Node *List_Init(int headvalue) {
+static struct Node * List_Init(int headvalue);
+static void List_Delete(struct Node *head);
+static enum ErrorCode List_ValueAt(struct Node *head, int index, int * value);
+static enum ErrorCode List_PushAt(struct Node * head, int index, int value);
+static enum ErrorCode List_PushFront(struct Node * head, int value);
+static enum ErrorCode List_PushBack(struct Node * head, int value);
+static enum ErrorCode List_PopAt(struct Node * head, int index, int * value);
+static enum ErrorCode List_PopFront(struct Node * head, int * value);
+static enum ErrorCode List_PopBack(struct Node * head, int * value);
+static int List_Contains(struct Node * head, int value);
+static enum ErrorCode List_IndexOf(struct Node * head, int value);
+static enum ErrorCode List_Remove(struct Node * head, int value);
+
+static int LL_ConditionalFirstElement(struct LinkedList * list, int value);
+struct LinkedList * LL_Init();
+void LL_Delete(struct LinkedList * list);
+int LL_Length(struct LinkedList * list);
+enum ErrorCode LL_ValueAt(struct LinkedList * list, int index, int * value);
+enum ErrorCode LL_PushAt(struct LinkedList * list, int index, int value);
+enum ErrorCode LL_PushFront(struct LinkedList * list, int value);
+enum ErrorCode LL_PushBack(struct LinkedList * list, int value);
+enum ErrorCode LL_PopAt(struct LinkedList * list, int index, int * value);
+enum ErrorCode LL_PopFront(struct LinkedList * list, int * value);
+enum ErrorCode LL_PopBack(struct LinkedList * list, int * value);
+int LL_Contains(struct LinkedList * list, int value);
+enum ErrorCode LL_IndexOf(struct LinkedList * list, int value);
+enum ErrorCode LL_Remove(struct LinkedList * list, int value);
+
+int main() {
+    struct LinkedList * test = LL_Init();
+    LL_PushBack(test, 1);
+    LL_PushBack(test, 3);
+    LL_PushBack(test, 7);
+    LL_PushFront(test, 0);
+    LL_PushFront(test, -1);
+    LL_PushAt(test, 5, 9);
+
+    int i, k, l = test->length, fetch_fail;
+    for (i=0;i<l;i++) {
+        fetch_fail = LL_ValueAt(test, i, &k);
+        if (!fetch_fail) printf("%d\n", k);
+        else printf("Error: %d\n", fetch_fail);
+    }
+
+        
+    LL_Delete(test);
+    return 0;
+}
+
+
+/*
+1) push_back, push_front
+2) length, value_at(5)
+3) pop_back, pop_front
+4) push_at(2, 20), pop_at(5)
+5) contains(value), remove(value), index_of(value)
+*/
+
+static struct Node * List_Init(int headvalue) {
     struct Node *self = malloc(sizeof(struct Node));
     self->value = headvalue;
     self->next = NULL;
@@ -95,6 +153,7 @@ static enum ErrorCode List_PushAt(struct Node * head, int index, int value) {
 enum ErrorCode LL_PushAt(struct LinkedList * list, int index, int value) {
     enum ErrorCode is_error = errOK;
     if (list->length < index && index < 0) return errInvalidIndex;
+    if (list->length == index) return LL_PushBack(list, value);
     if (LL_ConditionalFirstElement(list, value)) {
         is_error = List_PushAt(list->pointer, index, value);
     }
@@ -247,30 +306,3 @@ enum ErrorCode LL_Remove(struct LinkedList * list, int value) {
     list->length--;
     return List_Remove(list->pointer, value);
 }
-
-int main() {
-    struct LinkedList * test = LL_Init();
-    LL_PushBack(test, 1);
-    LL_PushBack(test, 3);
-    LL_PushBack(test, 7);
-
-    int i, k, l = test->length, fetch_fail;
-    for (i=0;i<l;i++) {
-        fetch_fail = LL_ValueAt(test, i, &k);
-        if (!fetch_fail) printf("%d\n", k);
-        else printf("Error: %d\n", fetch_fail);
-    }
-
-        
-    LL_Delete(test);
-    return 0;
-}
-
-
-/*
-1) push_back, push_front
-2) length, value_at(5)
-3) pop_back, pop_front
-4) push_at(2, 20), pop_at(5)
-5) contains(value), remove(value), index_of(value)
-*/
