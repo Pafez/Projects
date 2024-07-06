@@ -50,7 +50,7 @@ static void List_Delete(struct Node *head) {
 }
 
 void LL_Delete(struct LinkedList * list) {
-    List_Delete(list->pointer);
+    if (list->length != 0) List_Delete(list->pointer);
     free(list);
 }
 
@@ -270,9 +270,8 @@ enum ErrorCode LL_Remove(struct LinkedList * list, int value) {
 int main() {
     struct LinkedList * test = LL_Init();
 
-
     int k;
-    printf("%d", LL_ValueAt(test, -1, &k));
+    printf("%d", LL_ValueAt(test, 0, &k));
 
     LL_Delete(test);
     return 0;
