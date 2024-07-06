@@ -54,25 +54,6 @@ void LL_Delete(struct LinkedList * list) {
     free(list);
 }
 
-static enum ErrorCode List_Append(struct Node *head, int value) {
-    struct Node *iterator = head;
-
-    while (iterator->next != NULL) {
-        iterator = iterator->next;
-    }
-
-    iterator->next = List_Init(value);
-    return errOK;
-}
-
-int LL_Append(struct LinkedList * list, int value) {
-    if (LL_ConditionalFirstElement(list, value)) {
-        List_Append(list->pointer, value);
-    }
-    list->length++;
-    return errOK;
-}
-
 int LL_Length(struct LinkedList * list) {
     return list->length;
 }
@@ -269,10 +250,18 @@ enum ErrorCode LL_Remove(struct LinkedList * list, int value) {
 
 int main() {
     struct LinkedList * test = LL_Init();
+    LL_PushBack(test, 1);
+    LL_PushBack(test, 3);
+    LL_PushBack(test, 7);
 
-    int k;
-    printf("%d", LL_ValueAt(test, 0, &k));
+    int i, k, l = test->length, fetch_fail;
+    for (i=0;i<l;i++) {
+        fetch_fail = LL_ValueAt(test, i, &k);
+        if (!fetch_fail) printf("%d\n", k);
+        else printf("Error: %d\n", fetch_fail);
+    }
 
+        
     LL_Delete(test);
     return 0;
 }
